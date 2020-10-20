@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ftptest-pvc3
+  namespace: ns3
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: nfs-client
+  resources:
+    requests:
+      storage: 4Gi

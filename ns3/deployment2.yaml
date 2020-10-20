@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ns3
+  name: reader-deployment
+spec:
+  selector:
+    matchLabels:
+      app: reader
+  template:
+    metadata:
+      labels:
+        app: reader
+    spec:
+      volumes:
+        - name: ftptest2-pv3
+          persistentVolumeClaim:
+            claimName: ftptest-pvc3
+            readOnly: false
+      containers:
+      - name: reader
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: "/home/"
+            name: ftptest2-pv3

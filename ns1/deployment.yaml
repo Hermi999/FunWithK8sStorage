@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ns1
+  name: reader1-deployment
+spec:
+  selector:
+    matchLabels:
+      app: reader1
+  template:
+    metadata:
+      labels:
+        app: reader1
+    spec:
+      volumes:
+        - name: ftptest-pv
+          persistentVolumeClaim:
+            claimName: ftptest-pvc
+            readOnly: false
+      containers:
+      - name: reader1
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: "/home/test"
+            name: ftptest-pv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ns1
+  name: reader2-deployment
+spec:
+  selector:
+    matchLabels:
+      app: reader2
+  template:
+    metadata:
+      labels:
+        app: reader2
+    spec:
+      volumes:
+        - name: ftptest-pv2
+          persistentVolumeClaim:
+            claimName: ftptest-pvc
+            readOnly: false
+      containers:
+      - name: reader2
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: "/home"
+            name: ftptest-pv2

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftptest-deployment
+  namespace: ns3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftptest
+  template:
+    metadata:
+      labels:
+        app: ftptest
+    spec:
+      volumes:
+        - name: ftptest-pv3
+          persistentVolumeClaim:
+            claimName: ftptest-pvc3
+            readOnly: false
+      containers:
+      - name: ftptest
+        image: fauria/vsftpd
+        ports:
+        - containerPort: 21
+          protocol: TCP
+          name: "ftp-server"
+        volumeMounts:
+          - mountPath: "/home/vsftpd"
+            name: ftptest-pv3
+        env:
+          - name: FTP_USER
+            value: "hewa"
+          - name: FTP_PASS
+            value: "hermann12345"
+          - name: PASV_MIN_PORT
+            value: "31200"
+          - name: PASV_MAX_PORT
+            value: "31203"
+          - name: PASV_PROMISCUOUS
+            value: "YES"
